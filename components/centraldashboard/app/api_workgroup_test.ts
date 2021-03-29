@@ -320,6 +320,10 @@ describe('Workgroup API', () => {
                     owner: {
                         kind: 'User',
                         name: 'anonymous@kubeflow.org',
+                    },
+                    resourceQuotaSpec: {
+                        hard: {
+                        }
                     }
                 },
             });
@@ -339,6 +343,10 @@ describe('Workgroup API', () => {
                     owner: {
                         kind: 'User',
                         name: 'test@testdomain.com',
+                    },
+                    resourceQuotaSpec: {
+                        hard: {
+                        }
                     }
                 },
             });
@@ -361,6 +369,10 @@ describe('Workgroup API', () => {
                     owner: {
                         kind: 'User',
                         name: 'another_user@foo.bar',
+                    },
+                    resourceQuotaSpec: {
+                        hard: {
+                        }
                     }
                 },
             });
@@ -376,6 +388,10 @@ describe('Workgroup API', () => {
                         owner: {
                             kind: 'User',
                             name: 'test@testdomain.com',
+                        },
+                        resourceQuotaSpec: {
+                            hard: {
+                            }
                         }
                     },
                 })

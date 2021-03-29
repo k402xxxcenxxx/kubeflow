@@ -2,7 +2,7 @@ import {V1Namespace} from '@kubernetes/client-node';
 import {Router, Request, Response, NextFunction} from 'express';
 import {Binding as WorkgroupBinding, DefaultApi} from './clients/profile_controller';
 import {KubernetesService, PlatformInfo} from './k8s_service';
-
+//import * as k8s from '@kubernetes/client-node';
 import {
     apiError,
     ERRORS,
@@ -17,6 +17,7 @@ type ContributorActions = 'create' | 'remove';
 interface CreateProfileRequest {
     namespace?: string;
     user?: string;
+    [key: string]: string;
 }
 
 interface AddOrRemoveContributorRequest {
@@ -275,9 +276,11 @@ export class WorkgroupApi {
         })
         .post('/create', async (req: Request, res: Response) => {
             const profile = req.body as CreateProfileRequest;
+            //const cm = this.k8sService ? await this.k8sService.getConfigMap() : {};
             try {
                 const namespace = profile.namespace || req.user.username;
                 // Use the request body if provided, fallback to auth headers
+                //let rqs = (cm.data && "resourceQuotaSpec" in cm.data) ? JSON.parse(cm.data("reousrceQuotaSpec")) : {};
                 await this.profilesService.createProfile({
                     metadata: {
                         name: namespace,
@@ -286,6 +289,15 @@ export class WorkgroupApi {
                         owner: {
                             kind: 'User',
                             name: profile.user || req.user.email,
+                        },
+                        resourceQuotaSpec: {
+                            hard: {
+                                ...(profile.cpu && {cpu: profile.cpu}),
+                                ...(profile.memory && {memory: profile.memory}),
+                                ...(profile.gpu && {'requests.nvidia.com/gpu': profile.gpu}),
+                                ...(profile.pvc && {'persistentvolumeclaims': profile.pvc}),
+                                ...(profile.storage && {'requests.storage': profile.storage}),
+                            }
                         }
                     },
                 });

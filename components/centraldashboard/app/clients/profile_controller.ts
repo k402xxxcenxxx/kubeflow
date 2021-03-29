@@ -267,6 +267,7 @@ export class ProfileSpec {
     * Only accept kind: user
     */
     'owner'?: Subject;
+    'resourceQuotaSpec'?: ResourceQuotaSpec;
 
     static discriminator: string | undefined = undefined;
 
@@ -275,7 +276,12 @@ export class ProfileSpec {
             "name": "owner",
             "baseName": "owner",
             "type": "Subject"
-        }    ];
+        },
+        {
+            "name": "resourceQuotaSpec",
+            "baseName": "resourceQuotaSpec",
+            "type": "ResourceQuotaSpec"
+        }     ];
 
     static getAttributeTypeMap() {
         return ProfileSpec.attributeTypeMap;
@@ -375,6 +381,35 @@ export class Subject {
     }
 }
 
+export class ResourceQuotaSpec {
+    'hard'?: ResourceQuota;
+
+    static discriminator: string | undefined = undefined;
+
+    static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        {
+            "name": "hard",
+            "baseName": "hard",
+            "type": "ResourceQuota"
+        }   ];
+
+    static getAttributeTypeMap() {
+        return ResourceQuotaSpec.attributeTypeMap;
+    }
+}
+
+export class ResourceQuota {
+    [key: string]: string;
+    
+    static discriminator: string | undefined = undefined;
+
+    static attributeTypeMap: Array<{name: string, baseName: string, type: string}> = [
+        ];
+
+    static getAttributeTypeMap() {
+        return ResourceQuota.attributeTypeMap;
+    }
+}
 
 let enumsMap: {[index: string]: any} = {
 }
@@ -389,6 +424,8 @@ let typeMap: {[index: string]: any} = {
     "ProfileStatus": ProfileStatus,
     "RoleRef": RoleRef,
     "Subject": Subject,
+    "ResourceQuotaSpec": ResourceQuotaSpec,
+    "ResourceQuota": ResourceQuota,
 }
 
 export interface Authentication {
